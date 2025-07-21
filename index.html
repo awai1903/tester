@@ -2,131 +2,165 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>💜 BTS Birthday Wall (Test Mode)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BTS Gallery Surprise</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
-      color: white;
-      text-align: center;
-      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+      font-family: 'Segoe UI', sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #111;
+      overflow-x: hidden;
     }
 
-    h2 {
-      margin-top: 40px;
-      font-size: 2.8rem;
-      text-shadow: 0 0 8px rgba(255,255,255,0.6);
-    }
-
-    .bts-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-      padding: 30px;
-    }
-
-    .bts-gallery div {
-      position: relative;
+    .gallery-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      animation: fadeIn 1s ease-in-out;
+      padding: 30px 10px;
     }
 
-    .bts-gallery img {
-      width: 130px;
-      height: 130px;
+    .row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+      gap: 15px;
+    }
+
+    .member {
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .member img {
+      width: 120px;
+      height: 120px;
       object-fit: cover;
       border-radius: 50%;
-      box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border: 3px solid transparent;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
     }
 
-    .bts-gallery img:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
-      border: 3px solid white;
+    .member:hover img {
+      transform: scale(1.05);
     }
 
-    .bts-gallery p {
-      margin-top: 10px;
-      font-weight: 600;
-      font-size: 1rem;
-      color: white;
-      text-shadow: 0 0 4px rgba(0,0,0,0.4);
+    .member .tap-text {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #222;
     }
 
-    .wish {
-      position: absolute;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      width: 180px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-
-    .bts-gallery div:hover .wish {
-      opacity: 1;
+    .wish-box {
+      margin-top: 15px;
+      max-width: 300px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: none;
+      animation: fadeIn 0.6s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    #next-button {
+      margin-top: 40px;
+      padding: 12px 25px;
+      background-color: #ff5fa2;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    #next-button:hover {
+      background-color: #ff408c;
     }
   </style>
 </head>
 <body>
+  <div class="gallery-container" id="gallery">
+    <div class="row">
+      <div class="member" onclick="showWish(this, 0)">
+        <img src="v.jpg" alt="Taehyung" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+      <div class="member" onclick="showWish(this, 1)">
+        <img src="jung kook.jpg" alt="Jungkook" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+      <div class="member" onclick="showWish(this, 2)">
+        <img src="jimin.jpg" alt="Jimin" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+      <div class="member" onclick="showWish(this, 3)">
+        <img src="rm.jpg" alt="RM" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="member" onclick="showWish(this, 4)">
+        <img src="jin.jpg" alt="Jin" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+      <div class="member" onclick="showWish(this, 5)">
+        <img src="j hope.jpg" alt="J-Hope" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+      <div class="member" onclick="showWish(this, 6)">
+        <img src="suga.jpg" alt="Suga" />
+        <div class="tap-text">⬆️ Double Tap this Picture</div>
+      </div>
+    </div>
 
-  <h2>💜 Your BTS Angels Wishing Hamna!</h2>
-
-  <div class="bts-gallery">
-    <div>
-      <img src="jin.jpg" alt="Jin" />
-      <div class="wish">Hamna-ssi~ I hope you smile today more than ever! 💫</div>
-      <p>Jin</p>
-    </div>
-    <div>
-      <img src="suga.jpg" alt="Suga" />
-      <div class="wish">Birthday is just a start... let the beat drop in your favor! 🔥</div>
-      <p>Suga</p>
-    </div>
-    <div>
-      <img src="j hope.jpg" alt="J-Hope" />
-      <div class="wish">Hamna, sunshine like me wishes you endless light ☀️</div>
-      <p>J-Hope</p>
-    </div>
-    <div>
-      <img src="rm.jpg" alt="RM" />
-      <div class="wish">To the brilliant mind — may your year be poetic 📚</div>
-      <p>RM</p>
-    </div>
-    <div>
-      <img src="jimin.jpg" alt="Jimin" />
-      <div class="wish">You deserve all the love in the universe today 💗</div>
-      <p>Jimin</p>
-    </div>
-    <div>
-      <img src="v.jpg" alt="V" />
-      <div class="wish">From TaeTae: Saranghae, Hamna~ stay magical ✨</div>
-      <p>V</p>
-    </div>
-    <div>
-      <img src="jung kook.jpg" alt="Jungkook" />
-      <div class="wish">Golden Maknae says: Let this be your golden day 🐰</div>
-      <p>Jungkook</p>
-    </div>
+    <div id="wishBox" class="wish-box"></div>
+    <button id="next-button" onclick="goToNext()">Next Surprise 🎁</button>
   </div>
 
+  <script>
+    const wishes = [
+      "Happy Birthday! You’re the brightest star in my galaxy ✨ – Taehyung",
+      "Wishing you a day filled with purple love and magic 💜 – Jungkook",
+      "Dance through life with joy, just like me 😎 – Jimin",
+      "Your birthday is legendary, just like BTS! – RM",
+      "Have the most beautiful day, full of laughter 🌸 – Jin",
+      "Hope your smile never fades today or ever 🌟 – J-Hope",
+      "You deserve the world. Stay golden 💛 – Suga"
+    ];
+
+    let currentWish = null;
+
+    function showWish(element, index) {
+      const wishBox = document.getElementById("wishBox");
+
+      if (currentWish !== index) {
+        currentWish = index;
+        wishBox.style.display = "block";
+        wishBox.innerText = wishes[index];
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        if (index === wishes.length - 1) {
+          setTimeout(() => {
+            document.getElementById("next-button").style.display = "block";
+          }, 800);
+        }
+      }
+    }
+
+    function goToNext() {
+      window.location.href = "next-surprise.html";
+    }
+  </script>
 </body>
 </html>
