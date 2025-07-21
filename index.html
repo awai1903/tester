@@ -1,22 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hamna's BTS Birthday Surprise</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTS Gallery Birthday</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: #111;
+      overflow-x: hidden;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 10px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .member {
+      width: 120px;
+      margin: 15px;
+      text-align: center;
+    }
+
+    .member img {
+      width: 100%;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .member img:hover {
+      transform: scale(1.05);
+    }
+
+    .wish {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .member {
+        width: 40%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <h1 class="page-title">BTS Birthday Gallery 🎂</h1>
-
-  <div class="gallery" id="gallery">
+<div class="gallery" id="gallery">
+  <!-- Member Example -->
   <div class="member" onclick="showWish(this, 0)">
     <img src="v.jpg" alt="Taehyung" />
     <div class="wish"></div>
   </div>
   <div class="member" onclick="showWish(this, 1)">
-    <img src="jung kook.jpg" alt="Jungkook" />
+    <img src="jungkook.jpg" alt="Jungkook" />
     <div class="wish"></div>
   </div>
   <div class="member" onclick="showWish(this, 2)">
@@ -32,15 +91,39 @@
     <div class="wish"></div>
   </div>
   <div class="member" onclick="showWish(this, 5)">
-    <img src="j hope.jpg" alt="J-Hope" />
+    <img src="jhope.jpg" alt="J-Hope" />
     <div class="wish"></div>
   </div>
   <div class="member" onclick="showWish(this, 6)">
     <img src="suga.jpg" alt="Suga" />
     <div class="wish"></div>
   </div>
-  </div>
+</div>
 
-  <script src="script.js"></script>
+<script>
+  const wishes = [
+    "🎉 Happy Birthday, shining star! 💜",
+    "Wishing you a magical day filled with joy and love.",
+    "May your dreams sparkle like your smile!",
+    "You are more beautiful than any BTS melody 🎶",
+    "Taehyung is proud of you today 💜",
+    "Sending purple vibes for your happiest birthday!",
+    "You light up the world just like BTS lights up the stage!",
+    "You’re loved beyond words 💜",
+    "May this birthday be as lovely as your heart 💫",
+    "Taehyung sends a virtual hug for your special day 💌",
+    // Add more wishes up to 100 below if needed...
+  ];
+
+  function showWish(memberEl, index) {
+    const allWishes = document.querySelectorAll('.wish');
+    allWishes.forEach(w => w.style.display = 'none'); // Hide all others
+
+    const wishBox = memberEl.querySelector('.wish');
+    wishBox.innerText = wishes[index % wishes.length]; // Loop if more members
+    wishBox.style.display = 'block';
+  }
+</script>
+
 </body>
 </html>
