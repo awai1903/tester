@@ -3,269 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hamna's Birthday 💜</title>
+  <title>Surprise for Hamna</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html {
+    body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('background.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background: url('background.jpg') no-repeat center center/cover;
       overflow-x: hidden;
-      color: #111;
     }
 
-    /* Section Styling */
     .section {
-      min-height: 100vh;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      padding: 40px 20px;
       text-align: center;
-      padding: 20px;
     }
 
-    .main-section {
-      display: flex;
-    }
-
-    #video-container {
-      position: relative;
-    }
-
-    #playButton {
-      font-size: 50px;
-      color: white;
-      background: rgba(0,0,0,0.6);
-      padding: 20px 30px;
-      border-radius: 100%;
-      cursor: pointer;
-      border: 3px solid white;
-      z-index: 10;
-    }
-
-    video {
-      max-width: 90vw;
-      max-height: 70vh;
-      display: none;
-      border-radius: 20px;
-    }
-
-    #nextBtn {
-      margin-top: 20px;
-      padding: 12px 25px;
-      background: #ff7eb9;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      display: none;
-    }
-
-    /* Wishes Page */
-    #taeImage {
+    .photo {
       width: 200px;
-      border-radius: 20px;
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-
-    #taeImage:hover {
-      transform: scale(1.05);
-    }
-
-    #wishes {
-      margin-top: 20px;
-      max-height: 60vh;
-      overflow-y: auto;
-      display: none;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 15px;
-    }
-
-    #wishes p {
-      margin: 10px 0;
-      font-weight: 500;
-      color: #333;
-    }
-
-    /* Gallery Section */
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      padding: 40px 10px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .member {
-      width: 120px;
-      margin: 15px;
-      text-align: center;
-    }
-
-    .member img {
-      width: 100%;
+      height: 200px;
       border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: transform 0.3s ease;
     }
 
-    .member img:hover {
+    .photo:hover {
       transform: scale(1.05);
     }
 
     .wish {
-      margin-top: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px;
-      border-radius: 12px;
-      font-size: 14px;
+      margin-top: 20px;
+      color: #fff;
+      font-size: 18px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
       display: none;
-      animation: fadeIn 0.5s ease-in-out;
+      animation: fadeIn 1s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
 
-    @media (max-width: 768px) {
-      .member { width: 40%; }
+    .gallery {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .next-btn {
+      margin-top: 30px;
+      padding: 12px 28px;
+      font-size: 16px;
+      background: #ff6b81;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .next-btn:hover {
+      background: #ff4757;
     }
   </style>
 </head>
 <body>
 
-<audio id="bgMusic" src="song.m4a" loop></audio>
-
-<!-- Section 1: Video -->
-<div class="section main-section">
-  <div id="video-container">
-    <div id="playButton">▶</div>
-    <video id="bdayVideo" src="video.mp4" controls></video>
+  <!-- Taehyung Photo Section -->
+  <div class="section" id="taehyung-section">
+    <img src="v.jpg" alt="Taehyung" class="photo" />
+    <div class="wish" id="taehyung-wish">💜 Happy Birthday Hamna! May your smile shine brighter than all the stars ✨</div>
+    <button class="next-btn" onclick="showGallery()">Next Surprise</button>
   </div>
-  <button id="nextBtn">Next Surprise 🎉</button>
-</div>
 
-<!-- Section 2: Taehyung Wish -->
-<div class="section" id="secondSection">
-  <img src="v.jpg" alt="Taehyung" id="taeImage">
-  <div id="wishes"></div>
-</div>
-
-<!-- Section 3: BTS Gallery -->
-<div class="section" id="thirdSection">
+  <!-- BTS Gallery Section -->
   <div class="gallery" id="gallery">
-    <div class="member" onclick="showWish(this, 0)">
-      <img src="v.jpg" alt="Taehyung" />
-      <div class="wish"></div>
+
+    <!-- Row 1: 4 Members -->
+    <div class="row">
+      <div>
+        <img src="rm.jpg" alt="RM" class="photo" onclick="showWish(0)" />
+        <div class="wish" id="wish-0">RM: You're strong, you're brave, you're beautiful 💪💜</div>
+      </div>
+      <div>
+        <img src="jungkook.jpg" alt="Jungkook" class="photo" onclick="showWish(1)" />
+        <div class="wish" id="wish-1">Jungkook: Keep chasing your dreams! 🐰✨</div>
+      </div>
+      <div>
+        <img src="jimin.jpg" alt="Jimin" class="photo" onclick="showWish(2)" />
+        <div class="wish" id="wish-2">Jimin: Your kindness is your superpower 💖</div>
+      </div>
+      <div>
+        <img src="jin.jpg" alt="Jin" class="photo" onclick="showWish(3)" />
+        <div class="wish" id="wish-3">Jin: Worldwide birthday girl! 🎂🌍</div>
+      </div>
     </div>
-    <div class="member" onclick="showWish(this, 1)">
-      <img src="jung kook.jpg" alt="Jungkook" />
-      <div class="wish"></div>
-    </div>
-    <div class="member" onclick="showWish(this, 2)">
-      <img src="jimin.jpg" alt="Jimin" />
-      <div class="wish"></div>
-    </div>
-    <div class="member" onclick="showWish(this, 3)">
-      <img src="jin.jpg" alt="Jin" />
-      <div class="wish"></div>
-    </div>
-    <div class="member" onclick="showWish(this, 4)">
-      <img src="rm.jpg" alt="RM" />
-      <div class="wish"></div>
-    </div>
-    <div class="member" onclick="showWish(this, 5)">
-      <img src="j hope.jpg" alt="J-Hope" />
-      <div class="wish"></div>
-    </div>
-    <div class="member" onclick="showWish(this, 6)">
-      <img src="suga.jpg" alt="Suga" />
-      <div class="wish"></div>
+
+    <!-- Row 2: 3 Members -->
+    <div class="row">
+      <div>
+        <img src="jhope.jpg" alt="J-Hope" class="photo" onclick="showWish(4)" />
+        <div class="wish" id="wish-4">J-Hope: Keep shining like sunshine! ☀️</div>
+      </div>
+      <div>
+        <img src="suga.jpg" alt="Suga" class="photo" onclick="showWish(5)" />
+        <div class="wish" id="wish-5">Suga: Peace, music & chill vibes your way 🎧</div>
+      </div>
+      <div>
+        <img src="v.jpg" alt="V" class="photo" onclick="showWish(6)" />
+        <div class="wish" id="wish-6">Taehyung again: You’re truly unforgettable 💜</div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const playBtn = document.getElementById('playButton');
-  const video = document.getElementById('bdayVideo');
-  const nextBtn = document.getElementById('nextBtn');
-  const bgMusic = document.getElementById('bgMusic');
-  const secondSection = document.getElementById('secondSection');
-  const thirdSection = document.getElementById('thirdSection');
-  const wishesDiv = document.getElementById('wishes');
-  const taeImage = document.getElementById('taeImage');
-
-  playBtn.addEventListener('click', () => {
-    playBtn.style.display = 'none';
-    video.style.display = 'block';
-    video.play();
-    nextBtn.style.display = 'inline-block';
-  });
-
-  nextBtn.addEventListener('click', () => {
-    document.querySelector('.main-section').style.display = 'none';
-    secondSection.style.display = 'flex';
-    bgMusic.play();
-  });
-
-  taeImage.addEventListener('click', () => {
-    if (wishesDiv.style.display === 'none') {
-      wishesDiv.style.display = 'block';
-      generateWishes();
-    } else {
-      wishesDiv.style.display = 'none';
-      wishesDiv.innerHTML = '';
+  <script>
+    function showGallery() {
+      document.getElementById("taehyung-section").style.display = "none";
+      document.getElementById("gallery").style.display = "flex";
     }
-    // Show third section after second
-    thirdSection.style.display = 'flex';
-  });
 
-  const wishes = [
-    "🎉 Happy Birthday Hamna! 💜 May your heart always smile.",
-    "💌 May Taehyung oppa send you a virtual hug today!",
-    "✨ You deserve BTS-level love and attention today.",
-    "🌈 You're a rainbow in someone’s storm, Hamna.",
-    "🌟 Sending you 100 stars to light your path today.",
-    "🫰 May love surround you like ARMY surrounds BTS.",
-    "🎶 May your life be filled with music and magic.",
-    "💫 Shine like a star, just like Taehyung does!",
-    "🕯️ A wish for you: peace, love, and BTS tickets!",
-    "🥰 May every step you take feel blessed today.",
-    "🧁 You're as sweet as a strawberry cupcake!",
-    "🌙 May you sleep tonight with a smile and dreams of Seoul.",
-    "📸 Smile today like you're posing for a BTS photocard!",
-    "💃 Dance like no one's watching—unless it's BTS 😜",
-    "💿 May every BTS song hit different for you today.",
-    "🎊 100 hugs, 100 wishes, 100 sparkles—for YOU!"
-  ];
+    function showWish(index) {
+      // Hide all wishes first
+      for (let i = 0; i <= 6; i++) {
+        document.getElementById(`wish-${i}`).style.display = "none";
+      }
 
-  function generateWishes() {
-    wishesDiv.innerHTML = '';
-    wishes.forEach((text) => {
-      const p = document.createElement('p');
-      p.innerText = text;
-      wishesDiv.appendChild(p);
-    });
-  }
-
-  function showWish(memberEl, index) {
-    const allWishes = document.querySelectorAll('.wish');
-    allWishes.forEach(w => w.style.display = 'none');
-
-    const wishBox = memberEl.querySelector('.wish');
-    wishBox.innerText = wishes[index % wishes.length];
-    wishBox.style.display = 'block';
-  }
-</script>
+      // Show selected wish
+      const wish = document.getElementById(`wish-${index}`);
+      if (wish) {
+        wish.style.display = "block";
+      }
+    }
+  </script>
 
 </body>
 </html>
