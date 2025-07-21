@@ -2,151 +2,149 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Surprise for Hamna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTS Birthday Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('background.jpg') no-repeat center center/cover;
-      overflow-x: hidden;
+      font-family: "Sacramento", cursive;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #000;
     }
-
-    .section {
-      padding: 40px 20px;
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .image-wrapper {
       text-align: center;
+      margin-bottom: 40px;
     }
-
-    .photo {
+    .rounded-image {
       width: 200px;
       height: 200px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      transition: transform 0.3s ease;
+      border: 4px solid white;
+      box-shadow: 0 0 20px rgba(255,255,255,0.6);
     }
-
-    .photo:hover {
-      transform: scale(1.05);
-    }
-
     .wish {
       margin-top: 20px;
-      color: #fff;
-      font-size: 18px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 32px;
       display: none;
       animation: fadeIn 1s ease forwards;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    .gallery {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
+    .next-button {
       margin-top: 40px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
-    }
-
-    .next-btn {
-      margin-top: 30px;
-      padding: 12px 28px;
-      font-size: 16px;
-      background: #ff6b81;
-      color: white;
+      padding: 12px 24px;
+      background-color: #ff69b4;
       border: none;
+      color: white;
+      font-size: 20px;
       border-radius: 30px;
       cursor: pointer;
-      transition: background 0.3s;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-
-    .next-btn:hover {
-      background: #ff4757;
+    .gallery {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    .member {
+      margin: 20px;
+      text-align: center;
+    }
+    .member img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+    .member p {
+      display: none;
+      font-size: 26px;
+      margin-top: 12px;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
-
-  <!-- Taehyung Photo Section -->
-  <div class="section" id="taehyung-section">
-    <img src="v.jpg" alt="Taehyung" class="photo" />
-    <div class="wish" id="taehyung-wish">💜 Happy Birthday Hamna! May your smile shine brighter than all the stars ✨</div>
-    <button class="next-btn" onclick="showGallery()">Next Surprise</button>
-  </div>
-
-  <!-- BTS Gallery Section -->
-  <div class="gallery" id="gallery">
-
-    <!-- Row 1: 4 Members -->
-    <div class="row">
-      <div>
-        <img src="rm.jpg" alt="RM" class="photo" onclick="showWish(0)" />
-        <div class="wish" id="wish-0">RM: You're strong, you're brave, you're beautiful 💪💜</div>
-      </div>
-      <div>
-        <img src="jungkook.jpg" alt="Jungkook" class="photo" onclick="showWish(1)" />
-        <div class="wish" id="wish-1">Jungkook: Keep chasing your dreams! 🐰✨</div>
-      </div>
-      <div>
-        <img src="jimin.jpg" alt="Jimin" class="photo" onclick="showWish(2)" />
-        <div class="wish" id="wish-2">Jimin: Your kindness is your superpower 💖</div>
-      </div>
-      <div>
-        <img src="jin.jpg" alt="Jin" class="photo" onclick="showWish(3)" />
-        <div class="wish" id="wish-3">Jin: Worldwide birthday girl! 🎂🌍</div>
-      </div>
+  <div class="container">
+    <div class="image-wrapper">
+      <img src="v.jpg" alt="Taehyung" class="rounded-image" onclick="showWish()" />
+      <div class="wish" id="taeWish">🎉 Happy Birthday Hamna! You're truly special – from Taehyung 💜</div>
+      <button class="next-button" id="nextBtn" onclick="showGallery()">Next Surprise 🎁</button>
     </div>
 
-    <!-- Row 2: 3 Members -->
-    <div class="row">
-      <div>
-        <img src="jhope.jpg" alt="J-Hope" class="photo" onclick="showWish(4)" />
-        <div class="wish" id="wish-4">J-Hope: Keep shining like sunshine! ☀️</div>
+    <div class="gallery" id="btsGallery">
+      <!-- First row: 4 members -->
+      <div class="member">
+        <img src="rm.jpg" onclick="showMessage(this)" />
+        <p>Wishing you wisdom and strength! – RM</p>
       </div>
-      <div>
-        <img src="suga.jpg" alt="Suga" class="photo" onclick="showWish(5)" />
-        <div class="wish" id="wish-5">Suga: Peace, music & chill vibes your way 🎧</div>
+      <div class="member">
+        <img src="jung kook.jpg" onclick="showMessage(this)" />
+        <p>Stay golden! Keep dreaming big – Jungkook</p>
       </div>
-      <div>
-        <img src="v.jpg" alt="V" class="photo" onclick="showWish(6)" />
-        <div class="wish" id="wish-6">Taehyung again: You’re truly unforgettable 💜</div>
+      <div class="member">
+        <img src="j hope.jpg" onclick="showMessage(this)" />
+        <p>Smile every day, you’re amazing! – J-Hope</p>
+      </div>
+      <div class="member">
+        <img src="jin.jpg" onclick="showMessage(this)" />
+        <p>Worldwide cutie wishes you love! – Jin</p>
+      </div>
+
+      <!-- Second row: 3 members -->
+      <div class="member">
+        <img src="jimin.jpg" onclick="showMessage(this)" />
+        <p>Never stop shining! Happy Birthday – Jimin</p>
+      </div>
+      <div class="member">
+        <img src="suga.jpg" onclick="showMessage(this)" />
+        <p>May your music and life flow sweetly – SUGA</p>
+      </div>
+      <div class="member">
+        <img src="v.jpg" onclick="showMessage(this)" />
+        <p>More love, more purple – Taehyung 💜</p>
       </div>
     </div>
   </div>
 
   <script>
-    function showGallery() {
-      document.getElementById("taehyung-section").style.display = "none";
-      document.getElementById("gallery").style.display = "flex";
+    function showWish() {
+      const wish = document.getElementById("taeWish");
+      const nextBtn = document.getElementById("nextBtn");
+      wish.style.display = "block";
+      nextBtn.style.display = "inline-block";
     }
 
-    function showWish(index) {
-      // Hide all wishes first
-      for (let i = 0; i <= 6; i++) {
-        document.getElementById(`wish-${i}`).style.display = "none";
-      }
+    function showGallery() {
+      document.getElementById("btsGallery").style.display = "flex";
+      document.getElementById("nextBtn").style.display = "none";
+    }
 
-      // Show selected wish
-      const wish = document.getElementById(`wish-${index}`);
-      if (wish) {
-        wish.style.display = "block";
-      }
+    function showMessage(imgElement) {
+      // Hide all other wishes
+      const messages = document.querySelectorAll('.member p');
+      messages.forEach(p => p.style.display = "none");
+
+      // Show only the selected one
+      const wish = imgElement.nextElementSibling;
+      wish.style.display = "block";
     }
   </script>
-
 </body>
 </html>
