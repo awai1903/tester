@@ -2,19 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BTS Gallery Birthday</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hamna's Birthday 💜</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      font-family: 'Segoe UI', sans-serif;
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: 'Segoe UI', sans-serif;
-      color: #111;
       overflow-x: hidden;
+      color: #111;
     }
 
+    /* Section Styling */
+    .section {
+      min-height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .main-section {
+      display: flex;
+    }
+
+    #video-container {
+      position: relative;
+    }
+
+    #playButton {
+      font-size: 50px;
+      color: white;
+      background: rgba(0,0,0,0.6);
+      padding: 20px 30px;
+      border-radius: 100%;
+      cursor: pointer;
+      border: 3px solid white;
+      z-index: 10;
+    }
+
+    video {
+      max-width: 90vw;
+      max-height: 70vh;
+      display: none;
+      border-radius: 20px;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ff7eb9;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* Wishes Page */
+    #taeImage {
+      width: 200px;
+      border-radius: 20px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    #taeImage:hover {
+      transform: scale(1.05);
+    }
+
+    #wishes {
+      margin-top: 20px;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: none;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 15px;
+    }
+
+    #wishes p {
+      margin: 10px 0;
+      font-weight: 500;
+      color: #333;
+    }
+
+    /* Gallery Section */
     .gallery {
       display: flex;
       flex-wrap: wrap;
@@ -60,67 +137,132 @@
     }
 
     @media (max-width: 768px) {
-      .member {
-        width: 40%;
-      }
+      .member { width: 40%; }
     }
   </style>
 </head>
 <body>
 
-<div class="gallery" id="gallery">
-  <!-- Member Example -->
-  <div class="member" onclick="showWish(this, 0)">
-    <img src="v.jpg" alt="Taehyung" />
-    <div class="wish"></div>
+<audio id="bgMusic" src="song.m4a" loop></audio>
+
+<!-- Section 1: Video -->
+<div class="section main-section">
+  <div id="video-container">
+    <div id="playButton">▶</div>
+    <video id="bdayVideo" src="video.mp4" controls></video>
   </div>
-  <div class="member" onclick="showWish(this, 1)">
-    <img src="jung kook.jpg" alt="Jungkook" />
-    <div class="wish"></div>
-  </div>
-  <div class="member" onclick="showWish(this, 2)">
-    <img src="jimin.jpg" alt="Jimin" />
-    <div class="wish"></div>
-  </div>
-  <div class="member" onclick="showWish(this, 3)">
-    <img src="jin.jpg" alt="Jin" />
-    <div class="wish"></div>
-  </div>
-  <div class="member" onclick="showWish(this, 4)">
-    <img src="rm.jpg" alt="RM" />
-    <div class="wish"></div>
-  </div>
-  <div class="member" onclick="showWish(this, 5)">
-    <img src="j hope.jpg" alt="J-Hope" />
-    <div class="wish"></div>
-  </div>
-  <div class="member" onclick="showWish(this, 6)">
-    <img src="suga.jpg" alt="Suga" />
-    <div class="wish"></div>
+  <button id="nextBtn">Next Surprise 🎉</button>
+</div>
+
+<!-- Section 2: Taehyung Wish -->
+<div class="section" id="secondSection">
+  <img src="v.jpg" alt="Taehyung" id="taeImage">
+  <div id="wishes"></div>
+</div>
+
+<!-- Section 3: BTS Gallery -->
+<div class="section" id="thirdSection">
+  <div class="gallery" id="gallery">
+    <div class="member" onclick="showWish(this, 0)">
+      <img src="v.jpg" alt="Taehyung" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 1)">
+      <img src="jung kook.jpg" alt="Jungkook" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 2)">
+      <img src="jimin.jpg" alt="Jimin" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 3)">
+      <img src="jin.jpg" alt="Jin" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 4)">
+      <img src="rm.jpg" alt="RM" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 5)">
+      <img src="j hope.jpg" alt="J-Hope" />
+      <div class="wish"></div>
+    </div>
+    <div class="member" onclick="showWish(this, 6)">
+      <img src="suga.jpg" alt="Suga" />
+      <div class="wish"></div>
+    </div>
   </div>
 </div>
 
 <script>
+  const playBtn = document.getElementById('playButton');
+  const video = document.getElementById('bdayVideo');
+  const nextBtn = document.getElementById('nextBtn');
+  const bgMusic = document.getElementById('bgMusic');
+  const secondSection = document.getElementById('secondSection');
+  const thirdSection = document.getElementById('thirdSection');
+  const wishesDiv = document.getElementById('wishes');
+  const taeImage = document.getElementById('taeImage');
+
+  playBtn.addEventListener('click', () => {
+    playBtn.style.display = 'none';
+    video.style.display = 'block';
+    video.play();
+    nextBtn.style.display = 'inline-block';
+  });
+
+  nextBtn.addEventListener('click', () => {
+    document.querySelector('.main-section').style.display = 'none';
+    secondSection.style.display = 'flex';
+    bgMusic.play();
+  });
+
+  taeImage.addEventListener('click', () => {
+    if (wishesDiv.style.display === 'none') {
+      wishesDiv.style.display = 'block';
+      generateWishes();
+    } else {
+      wishesDiv.style.display = 'none';
+      wishesDiv.innerHTML = '';
+    }
+    // Show third section after second
+    thirdSection.style.display = 'flex';
+  });
+
   const wishes = [
-    "🎉 Happy Birthday, shining star! 💜",
-    "Wishing you a magical day filled with joy and love.",
-    "May your dreams sparkle like your smile!",
-    "You are more beautiful than any BTS melody 🎶",
-    "Taehyung is proud of you today 💜",
-    "Sending purple vibes for your happiest birthday!",
-    "You light up the world just like BTS lights up the stage!",
-    "You’re loved beyond words 💜",
-    "May this birthday be as lovely as your heart 💫",
-    "Taehyung sends a virtual hug for your special day 💌",
-    // Add more wishes up to 100 below if needed...
+    "🎉 Happy Birthday Hamna! 💜 May your heart always smile.",
+    "💌 May Taehyung oppa send you a virtual hug today!",
+    "✨ You deserve BTS-level love and attention today.",
+    "🌈 You're a rainbow in someone’s storm, Hamna.",
+    "🌟 Sending you 100 stars to light your path today.",
+    "🫰 May love surround you like ARMY surrounds BTS.",
+    "🎶 May your life be filled with music and magic.",
+    "💫 Shine like a star, just like Taehyung does!",
+    "🕯️ A wish for you: peace, love, and BTS tickets!",
+    "🥰 May every step you take feel blessed today.",
+    "🧁 You're as sweet as a strawberry cupcake!",
+    "🌙 May you sleep tonight with a smile and dreams of Seoul.",
+    "📸 Smile today like you're posing for a BTS photocard!",
+    "💃 Dance like no one's watching—unless it's BTS 😜",
+    "💿 May every BTS song hit different for you today.",
+    "🎊 100 hugs, 100 wishes, 100 sparkles—for YOU!"
   ];
+
+  function generateWishes() {
+    wishesDiv.innerHTML = '';
+    wishes.forEach((text) => {
+      const p = document.createElement('p');
+      p.innerText = text;
+      wishesDiv.appendChild(p);
+    });
+  }
 
   function showWish(memberEl, index) {
     const allWishes = document.querySelectorAll('.wish');
-    allWishes.forEach(w => w.style.display = 'none'); // Hide all others
+    allWishes.forEach(w => w.style.display = 'none');
 
     const wishBox = memberEl.querySelector('.wish');
-    wishBox.innerText = wishes[index % wishes.length]; // Loop if more members
+    wishBox.innerText = wishes[index % wishes.length];
     wishBox.style.display = 'block';
   }
 </script>
