@@ -2,136 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Manly Reply Engine</title>
+  <title>Alpha Reply GPT</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #2b2b2b, #1a1a1a);
-      color: white;
+      background: #111;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 50px 20px;
+      padding: 50px;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      background: linear-gradient(to right, #ff0066, #ffcc00);
+      background: linear-gradient(to right, #ff66cc, #ffcc00);
       -webkit-background-clip: text;
       color: transparent;
+      font-size: 2.5em;
     }
 
-    .container {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      padding: 30px;
+    input, select, button, textarea {
       width: 100%;
       max-width: 500px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 10px;
-      display: block;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0 20px 0;
+      padding: 12px;
+      margin: 10px;
       border-radius: 10px;
       border: none;
       font-size: 1em;
     }
 
     button {
-      padding: 10px 20px;
       background: #ff0066;
-      border: none;
-      border-radius: 15px;
       color: white;
-      font-size: 1em;
       cursor: pointer;
       transition: 0.3s;
     }
 
     button:hover {
-      background: #ff3385;
+      background: #ff3399;
     }
 
-    #output {
+    #response {
       margin-top: 20px;
-      font-size: 1.1em;
-      background: rgba(255, 255, 255, 0.1);
+      white-space: pre-wrap;
+      background: #222;
       padding: 15px;
       border-radius: 10px;
+      max-width: 500px;
     }
   </style>
 </head>
 <body>
+  <h1>💬 Alpha Reply GPT</h1>
 
-  <h1>Manly Reply Engine 💬</h1>
-  <div class="container">
-    <label for="message">Unka Message:</label>
-    <input type="text" id="message" placeholder="Jaise: Tum busy ho?" />
+  <input type="text" id="girlMsg" placeholder="Uska message likho..." />
+  <select id="tone">
+    <option value="flirty">Flirty</option>
+    <option value="serious">Serious</option>
+    <option value="funny">Funny</option>
+    <option value="chill">Chill</option>
+    <option value="emotional">Emotional</option>
+  </select>
 
-    <label for="mood">Mood Choose Karo:</label>
-    <select id="mood">
-      <option value="flirty">Flirty</option>
-      <option value="funny">Funny</option>
-      <option value="serious">Serious</option>
-      <option value="chill">Chill</option>
-      <option value="emotional">Emotional</option>
-    </select>
+  <button onclick="getReply()">Generate Reply</button>
 
-    <button onclick="generateReply()">Reply Banao</button>
-
-    <div id="output"></div>
-  </div>
+  <div id="response">Suggested reply will appear here...</div>
 
   <script>
-    function generateReply() {
-      const msg = document.getElementById('message').value.toLowerCase();
-      const mood = document.getElementById('mood').value;
-      const output = document.getElementById('output');
-      let reply = "";
+    async function getReply() {
+      const msg = document.getElementById("girlMsg").value;
+      const tone = document.getElementById("tone").value;
+      const resBox = document.getElementById("response");
 
-      // Basic logic based on mood
-      if (mood === "flirty") {
-        if (msg.includes("busy")) reply = "Tere liye toh waqt bhi ruk jaye, main kya cheez hoon 😌";
-        else if (msg.includes("hello") || msg.includes("hi")) reply = "Hi toh bol diya... ab dil kab dogi? 😉";
-        else reply = "Itni pyari baat karogi toh flirt karna padega na 😏";
+      resBox.innerText = "Thinking like a real man... 🔥";
+
+      const prompt = `
+You are a confident, emotionally intelligent man. A girl sent you this message: "${msg}" and you want to reply in a '${tone}' tone. Generate a smart, respectful, slightly flirty (if tone is flirty) response like a mature, high-value man. Keep it natural, in casual Urdu/Hinglish.
+`;
+
+      const apiKey = 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
+
+      try {
+        const result = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+            max_tokens: 100,
+            temperature: 0.8,
+          }),
+        });
+
+        const data = await result.json();
+        const reply = data.choices[0].message.content.trim();
+        resBox.innerText = reply;
+      } catch (error) {
+        resBox.innerText = "Error: " + error.message;
       }
-
-      else if (mood === "funny") {
-        if (msg.includes("bore")) reply = "Bore? Chal, online UNO khelte hain, loser dare karega! 😂";
-        else reply = "Main serious ho jata, lekin tumhari baat ne hasaa diya 🤣";
-      }
-
-      else if (mood === "serious") {
-        if (msg.includes("badal gaye ho")) reply = "Change zaroor hua hoon, lekin asli insaan andar wahi hai.";
-        else reply = "Agar baat dil se ho, toh waqt ka bura hona bhi matter nahi karta.";
-      }
-
-      else if (mood === "chill") {
-        if (msg.includes("good night")) reply = "Sweet dreams queen 👑 kal phir chill karte hain.";
-        else reply = "Relax kar yaar, life already tension se bhari hai 😎";
-      }
-
-      else if (mood === "emotional") {
-        if (msg.includes("yaad")) reply = "Teri yaad aati hai, lekin khud ko samjha rakha hai ke strong rehna hai.";
-        else reply = "Kabhi kabhi sirf ek text se din ban jata hai — jaise abhi hua.";
-      }
-
-      else {
-        reply = "Manly mode ON 🔥 Par pehle mood toh bata bro 😅";
-      }
-
-      output.innerHTML = `<strong>Suggested Reply:</strong><br>${reply}`;
     }
   </script>
-
 </body>
 </html>
