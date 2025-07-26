@@ -2,149 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BTS Birthday Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+  <title>Manly Reply Engine</title>
   <style>
     body {
-      margin: 0;
-      font-family: "Sacramento", cursive;
-      background: url('background.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #000;
-    }
-    .container {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2b2b2b, #1a1a1a);
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 50px 20px;
     }
-    .image-wrapper {
-      text-align: center;
-      margin-bottom: 40px;
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #ff0066, #ffcc00);
+      -webkit-background-clip: text;
+      color: transparent;
     }
-    .rounded-image {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid white;
-      box-shadow: 0 0 20px rgba(255,255,255,0.6);
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
-    .wish {
-      margin-top: 20px;
-      font-size: 32px;
-      display: none;
-      animation: fadeIn 1s ease forwards;
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
     }
-    .next-button {
-      margin-top: 40px;
-      padding: 12px 24px;
-      background-color: #ff69b4;
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px 0;
+      border-radius: 10px;
       border: none;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #ff0066;
+      border: none;
+      border-radius: 15px;
       color: white;
-      font-size: 20px;
-      border-radius: 30px;
+      font-size: 1em;
       cursor: pointer;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: 0.3s;
     }
-    .gallery {
-      display: none;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 50px;
+
+    button:hover {
+      background: #ff3385;
     }
-    .member {
-      margin: 20px;
-      text-align: center;
-    }
-    .member img {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid white;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(255,255,255,0.4);
-    }
-    .member p {
-      display: none;
-      font-size: 26px;
-      margin-top: 12px;
-      animation: fadeIn 0.5s ease forwards;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+
+    #output {
+      margin-top: 20px;
+      font-size: 1.1em;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
+
+  <h1>Manly Reply Engine 💬</h1>
   <div class="container">
-    <div class="image-wrapper">
-      <img src="v.jpg" alt="Taehyung" class="rounded-image" onclick="showWish()" />
-      <div class="wish" id="taeWish">🎉 Happy Birthday Hamna! You're truly special – from Taehyung 💜</div>
-      <button class="next-button" id="nextBtn" onclick="showGallery()">Next Surprise 🎁</button>
-    </div>
+    <label for="message">Unka Message:</label>
+    <input type="text" id="message" placeholder="Jaise: Tum busy ho?" />
 
-    <div class="gallery" id="btsGallery">
-      <!-- First row: 4 members -->
-      <div class="member">
-        <img src="rm.jpg" onclick="showMessage(this)" />
-        <p>Wishing you wisdom and strength! – RM</p>
-      </div>
-      <div class="member">
-        <img src="jung kook.jpg" onclick="showMessage(this)" />
-        <p>Stay golden! Keep dreaming big – Jungkook</p>
-      </div>
-      <div class="member">
-        <img src="j hope.jpg" onclick="showMessage(this)" />
-        <p>Smile every day, you’re amazing! – J-Hope</p>
-      </div>
-      <div class="member">
-        <img src="jin.jpg" onclick="showMessage(this)" />
-        <p>Worldwide cutie wishes you love! – Jin</p>
-      </div>
+    <label for="mood">Mood Choose Karo:</label>
+    <select id="mood">
+      <option value="flirty">Flirty</option>
+      <option value="funny">Funny</option>
+      <option value="serious">Serious</option>
+      <option value="chill">Chill</option>
+      <option value="emotional">Emotional</option>
+    </select>
 
-      <!-- Second row: 3 members -->
-      <div class="member">
-        <img src="jimin.jpg" onclick="showMessage(this)" />
-        <p>Never stop shining! Happy Birthday – Jimin</p>
-      </div>
-      <div class="member">
-        <img src="suga.jpg" onclick="showMessage(this)" />
-        <p>May your music and life flow sweetly – SUGA</p>
-      </div>
-      <div class="member">
-        <img src="v.jpg" onclick="showMessage(this)" />
-        <p>More love, more purple – Taehyung 💜</p>
-      </div>
-    </div>
+    <button onclick="generateReply()">Reply Banao</button>
+
+    <div id="output"></div>
   </div>
 
   <script>
-    function showWish() {
-      const wish = document.getElementById("taeWish");
-      const nextBtn = document.getElementById("nextBtn");
-      wish.style.display = "block";
-      nextBtn.style.display = "inline-block";
-    }
+    function generateReply() {
+      const msg = document.getElementById('message').value.toLowerCase();
+      const mood = document.getElementById('mood').value;
+      const output = document.getElementById('output');
+      let reply = "";
 
-    function showGallery() {
-      document.getElementById("btsGallery").style.display = "flex";
-      document.getElementById("nextBtn").style.display = "none";
-    }
+      // Basic logic based on mood
+      if (mood === "flirty") {
+        if (msg.includes("busy")) reply = "Tere liye toh waqt bhi ruk jaye, main kya cheez hoon 😌";
+        else if (msg.includes("hello") || msg.includes("hi")) reply = "Hi toh bol diya... ab dil kab dogi? 😉";
+        else reply = "Itni pyari baat karogi toh flirt karna padega na 😏";
+      }
 
-    function showMessage(imgElement) {
-      // Hide all other wishes
-      const messages = document.querySelectorAll('.member p');
-      messages.forEach(p => p.style.display = "none");
+      else if (mood === "funny") {
+        if (msg.includes("bore")) reply = "Bore? Chal, online UNO khelte hain, loser dare karega! 😂";
+        else reply = "Main serious ho jata, lekin tumhari baat ne hasaa diya 🤣";
+      }
 
-      // Show only the selected one
-      const wish = imgElement.nextElementSibling;
-      wish.style.display = "block";
+      else if (mood === "serious") {
+        if (msg.includes("badal gaye ho")) reply = "Change zaroor hua hoon, lekin asli insaan andar wahi hai.";
+        else reply = "Agar baat dil se ho, toh waqt ka bura hona bhi matter nahi karta.";
+      }
+
+      else if (mood === "chill") {
+        if (msg.includes("good night")) reply = "Sweet dreams queen 👑 kal phir chill karte hain.";
+        else reply = "Relax kar yaar, life already tension se bhari hai 😎";
+      }
+
+      else if (mood === "emotional") {
+        if (msg.includes("yaad")) reply = "Teri yaad aati hai, lekin khud ko samjha rakha hai ke strong rehna hai.";
+        else reply = "Kabhi kabhi sirf ek text se din ban jata hai — jaise abhi hua.";
+      }
+
+      else {
+        reply = "Manly mode ON 🔥 Par pehle mood toh bata bro 😅";
+      }
+
+      output.innerHTML = `<strong>Suggested Reply:</strong><br>${reply}`;
     }
   </script>
+
 </body>
 </html>
