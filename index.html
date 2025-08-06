@@ -2,108 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Alpha Reply GPT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTS Gallery Birthday</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: #111;
-      color: #fff;
+      margin: 0;
+      padding: 0;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: #111;
+      overflow-x: hidden;
+    }
+
+    .gallery {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
       align-items: center;
-      padding: 50px;
+      padding: 40px 10px;
+      max-width: 1000px;
+      margin: auto;
     }
 
-    h1 {
-      background: linear-gradient(to right, #ff66cc, #ffcc00);
-      -webkit-background-clip: text;
-      color: transparent;
-      font-size: 2.5em;
+    .member {
+      width: 120px;
+      margin: 15px;
+      text-align: center;
     }
 
-    input, select, button, textarea {
+    .member img {
       width: 100%;
-      max-width: 500px;
-      padding: 12px;
-      margin: 10px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-    }
-
-    button {
-      background: #ff0066;
-      color: white;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       cursor: pointer;
-      transition: 0.3s;
+      transition: transform 0.3s;
     }
 
-    button:hover {
-      background: #ff3399;
+    .member img:hover {
+      transform: scale(1.05);
     }
 
-    #response {
-      margin-top: 20px;
-      white-space: pre-wrap;
-      background: #222;
-      padding: 15px;
-      border-radius: 10px;
-      max-width: 500px;
+    .wish {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .member {
+        width: 40%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>💬 Alpha Reply GPT</h1>
 
-  <input type="text" id="girlMsg" placeholder="Uska message likho..." />
-  <select id="tone">
-    <option value="flirty">Flirty</option>
-    <option value="serious">Serious</option>
-    <option value="funny">Funny</option>
-    <option value="chill">Chill</option>
-    <option value="emotional">Emotional</option>
-  </select>
+<div class="gallery" id="gallery">
+  <!-- Member Example -->
+  <div class="member" onclick="showWish(this, 0)">
+    <img src="v.jpg" alt="Taehyung" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 1)">
+    <img src="jung kook.jpg" alt="Jungkook" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 2)">
+    <img src="jimin.jpg" alt="Jimin" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 3)">
+    <img src="jin.jpg" alt="Jin" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 4)">
+    <img src="rm.jpg" alt="RM" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 5)">
+    <img src="j hope.jpg" alt="J-Hope" />
+    <div class="wish"></div>
+  </div>
+  <div class="member" onclick="showWish(this, 6)">
+    <img src="suga.jpg" alt="Suga" />
+    <div class="wish"></div>
+  </div>
+</div>
 
-  <button onclick="getReply()">Generate Reply</button>
+<script>
+  const wishes = [
+    "🎉 Happy Birthday, shining star! 💜",
+    "Wishing you a magical day filled with joy and love.",
+    "May your dreams sparkle like your smile!",
+    "You are more beautiful than any BTS melody 🎶",
+    "Taehyung is proud of you today 💜",
+    "Sending purple vibes for your happiest birthday!",
+    "You light up the world just like BTS lights up the stage!",
+    "You’re loved beyond words 💜",
+    "May this birthday be as lovely as your heart 💫",
+    "Taehyung sends a virtual hug for your special day 💌",
+    // Add more wishes up to 100 below if needed...
+  ];
 
-  <div id="response">Suggested reply will appear here...</div>
+  function showWish(memberEl, index) {
+    const allWishes = document.querySelectorAll('.wish');
+    allWishes.forEach(w => w.style.display = 'none'); // Hide all others
 
-  <script>
-    async function getReply() {
-      const msg = document.getElementById("girlMsg").value;
-      const tone = document.getElementById("tone").value;
-      const resBox = document.getElementById("response");
+    const wishBox = memberEl.querySelector('.wish');
+    wishBox.innerText = wishes[index % wishes.length]; // Loop if more members
+    wishBox.style.display = 'block';
+  }
+</script>
 
-      resBox.innerText = "Thinking like a real man... 🔥";
-
-      const prompt = `
-You are a confident, emotionally intelligent man. A girl sent you this message: "${msg}" and you want to reply in a '${tone}' tone. Generate a smart, respectful, slightly flirty (if tone is flirty) response like a mature, high-value man. Keep it natural, in casual Urdu/Hinglish.
-`;
-
-      const apiKey = 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
-
-      try {
-        const result = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4",
-            messages: [{ role: "user", content: prompt }],
-            max_tokens: 100,
-            temperature: 0.8,
-          }),
-        });
-
-        const data = await result.json();
-        const reply = data.choices[0].message.content.trim();
-        resBox.innerText = reply;
-      } catch (error) {
-        resBox.innerText = "Error: " + error.message;
-      }
-    }
-  </script>
 </body>
-</html>
+  </html>
+  
