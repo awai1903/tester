@@ -3,15 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Bot - BTC/USDT</title>
+    <title>Trading Bot Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>BTC/USDT Trading Bot</h1>
+        <h1>Trading Bot Dashboard</h1>
+        <div class="controls">
+            <label for="pairSelector">Select Pair:</label>
+            <select id="pairSelector">
+                <option value="btcusdt">BTC/USDT</option>
+                <option value="ethusdt">ETH/USDT</option>
+            </select>
+            <button id="analyseBtn">Analyse Chart</button>
+        </div>
         <div id="chart" class="chart-container"></div>
-        <button id="analyseBtn">Analyse Chart</button>
         <div id="signalPanel" class="signal-panel">No signal yet</div>
     </div>
     <script src="script.js"></script>
