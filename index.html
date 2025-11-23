@@ -3,38 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mobile Sniper Reflex Trainer</title>
+<title>FF Style Sniper Trainer</title>
 <style>
   body {
     margin: 0;
+    padding: 0;
+    background: #0d0d0d;
     font-family: Arial, sans-serif;
-    background: #0a0a0a;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     overflow: hidden;
   }
 
   #gameArea {
     position: relative;
-    width: 100%;
-    max-width: 400px; /* optimized for Redmi 14C screen */
-    height: 90vh;
-    background: #222;
-    border: 2px solid #555;
-    border-radius: 10px;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(#111, #222);
     overflow: hidden;
-    touch-action: manipulation;
   }
 
+  /* FF style HUD buttons */
+  .button {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+    user-select: none;
+  }
+
+  #fireBtn { bottom: 20px; right: 20px; }
+  #scopeBtn { bottom: 90px; right: 20px; }
+  #jumpBtn { bottom: 160px; right: 20px; }
+  #crouchBtn { bottom: 230px; right: 20px; }
+  #switchBtn { bottom: 300px; right: 20px; }
+
+  /* Mini joystick */
+  #joystick {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    touch-action: none;
+  }
+  
+  /* Targets */
   .target {
     position: absolute;
     width: 50px;
     height: 50px;
     background: red;
     border-radius: 50%;
+    border: 2px solid yellow;
     cursor: pointer;
     animation: pulse 0.8s infinite;
   }
@@ -45,26 +73,27 @@
     100% { transform: scale(1); }
   }
 
-  #stats {
+  /* Crosshair */
+  #crosshair {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    font-size: 16px;
-    line-height: 1.5;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    margin-top: -20px;
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: none;
   }
 
-  #startBtn {
+  /* Stats display */
+  #stats {
     position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 15px;
-    font-size: 16px;
-    background: green;
-    border: none;
-    border-radius: 5px;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
     color: #fff;
-    cursor: pointer;
   }
 
 </style>
@@ -72,71 +101,77 @@
 <body>
 
 <div id="gameArea">
+  <div id="crosshair"></div>
   <div id="stats">Hits: 0 | Misses: 0 | Accuracy: 0%</div>
-  <button id="startBtn">Start Sniper Practice</button>
+  
+  <!-- FF style HUD -->
+  <div class="button" id="fireBtn">F</div>
+  <div class="button" id="scopeBtn">S</div>
+  <div class="button" id="jumpBtn">J</div>
+  <div class="button" id="crouchBtn">C</div>
+  <div class="button" id="switchBtn">W</div>
+
+  <div id="joystick"></div>
 </div>
 
 <script>
-let hits = 0;
-let misses = 0;
-let totalClicks = 0;
-let gameInterval;
-
+let hits = 0, misses = 0, totalClicks = 0;
 const gameArea = document.getElementById('gameArea');
 const stats = document.getElementById('stats');
-const startBtn = document.getElementById('startBtn');
 
 function updateStats() {
-  const accuracy = totalClicks === 0 ? 0 : ((hits / totalClicks) * 100).toFixed(1);
+  const accuracy = totalClicks === 0 ? 0 : ((hits/totalClicks)*100).toFixed(1);
   stats.innerText = `Hits: ${hits} | Misses: ${misses} | Accuracy: ${accuracy}%`;
 }
 
-function createTarget() {
+// Target creation
+function spawnTarget() {
   const target = document.createElement('div');
   target.className = 'target';
-  
+
   const maxX = gameArea.clientWidth - 50;
   const maxY = gameArea.clientHeight - 50;
-  
+
   target.style.left = Math.random() * maxX + 'px';
   target.style.top = Math.random() * maxY + 'px';
 
-  // Randomly move target a little after spawn to simulate moving enemy
-  let moveInterval = setInterval(() => {
+  // moving target to simulate in-game movement
+  const moveInterval = setInterval(() => {
     target.style.left = Math.random() * maxX + 'px';
     target.style.top = Math.random() * maxY + 'px';
-  }, 500);
+  }, 600); // moves every 0.6s
 
   target.addEventListener('click', () => {
     hits++;
     totalClicks++;
     updateStats();
     clearInterval(moveInterval);
-    if (gameArea.contains(target)) gameArea.removeChild(target);
+    if(gameArea.contains(target)) gameArea.removeChild(target);
   });
 
   gameArea.appendChild(target);
 
   setTimeout(() => {
-    if (gameArea.contains(target)) {
+    if(gameArea.contains(target)) {
       misses++;
       totalClicks++;
       updateStats();
       clearInterval(moveInterval);
       gameArea.removeChild(target);
     }
-  }, 1500); // Target disappears after 1.5s
+  }, 1500); // target disappears
 }
 
-startBtn.addEventListener('click', () => {
-  hits = 0;
-  misses = 0;
-  totalClicks = 0;
-  updateStats();
-  if (gameInterval) clearInterval(gameInterval);
-  gameInterval = setInterval(createTarget, 800); // spawn new target every 0.8s
-});
-</script>
+// Spawn targets continuously
+setInterval(spawnTarget, 800);
 
+// HUD buttons click simulation
+document.getElementById('fireBtn').addEventListener('click', () => alert('Fire!'));
+document.getElementById('scopeBtn').addEventListener('click', () => alert('Scoped!'));
+document.getElementById('jumpBtn').addEventListener('click', () => alert('Jump!'));
+document.getElementById('crouchBtn').addEventListener('click', () => alert('Crouch!'));
+document.getElementById('switchBtn').addEventListener('click', () => alert('Switch Weapon!'));
+
+</script>
 </body>
 </html>
