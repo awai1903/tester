@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shareable Dynamic Card Generator</title>
+<title>Ultimate Pro Card Generator</title>
 <style>
 /* ===== Body & Container ===== */
 body {
@@ -44,7 +44,7 @@ h1 {
 }
 
 /* ===== Input Controls ===== */
-textarea, select {
+textarea, select, input {
   width: 100%;
   margin-bottom: 15px;
   padding: 14px;
@@ -77,9 +77,10 @@ button:hover {
 #previewContainer {
   margin-top: 25px;
   width: 100%;
-  height: 450px;
+  height: 500px;
   perspective: 2000px;
   position: relative;
+  overflow: hidden;
 }
 
 /* ===== Card Styles ===== */
@@ -114,11 +115,6 @@ button:hover {
   animation: fadeInUp 1.5s ease;
 }
 
-@keyframes fadeInUp {
-  0% { opacity:0; transform: translateY(20px);}
-  100% { opacity:1; transform: translateY(0);}
-}
-
 /* ===== Card Themes ===== */
 .theme-love { background: linear-gradient(135deg,#ff416c,#ff4b2b); color:#fff; }
 .theme-birthday { background: linear-gradient(135deg,#fbc2eb,#a6c1ee); color:#111; }
@@ -145,24 +141,45 @@ button:hover {
   100% { transform: translateY(-100%); opacity:0; }
 }
 
-/* ===== Next / Share Button ===== */
-#nextBtn { background: linear-gradient(90deg,#00c6ff,#0072ff); color:#fff; }
-#shareLink { margin-top:10px; word-break: break-all; }
+@keyframes fadeInUp {
+  0% { opacity:0; transform: translateY(20px);}
+  100% { opacity:1; transform: translateY(0);}
+}
 
-/* ===== Responsiveness ===== */
+/* ===== Share/Input Area ===== */
+#shareLink { margin-top:10px; word-break: break-all; width:100%; padding:12px; border-radius:10px; border:none; }
+
+/* ===== Navigation Buttons ===== */
+.navBtn { background: linear-gradient(90deg,#00c6ff,#0072ff); color:#fff; }
+
+/* ===== Emoji/Sticker area ===== */
+#emojiPanel {
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.emojiBtn {
+  font-size:24px;
+  margin:5px;
+  cursor:pointer;
+}
+
+/* ===== Background Music ===== */
+audio { display:none; }
+
 @media (max-width: 600px){
   .card h2 { font-size: 24px; }
   .card p { font-size: 16px; }
-  textarea, select { font-size: 14px; }
+  textarea, select, input { font-size: 14px; }
   button { font-size: 14px; padding: 12px 20px; }
 }
-
 </style>
 </head>
 <body>
 
 <div id="generator">
-<h1>Shareable Dynamic Card Generator</h1>
+<h1>Ultimate Pro Card Generator</h1>
 
 <textarea id="cardText" placeholder="Enter your card message here..." rows="4"></textarea>
 <select id="themeSelect">
@@ -173,22 +190,48 @@ button:hover {
   <option value="theme-summer">Summer Theme</option>
   <option value="theme-sparkle">Sparkle Theme</option>
 </select>
+
+<div id="emojiPanel">
+  <span class="emojiBtn">❤️</span>
+  <span class="emojiBtn">🎉</span>
+  <span class="emojiBtn">🎃</span>
+  <span class="emojiBtn">✨</span>
+  <span class="emojiBtn">👑</span>
+</div>
+
 <button id="generateBtn">Generate Card</button>
 
 <div id="previewContainer"></div>
 
-<button id="nextBtn">Next Card</button>
+<button class="navBtn" id="prevBtn">Previous Card</button>
+<button class="navBtn" id="nextBtn">Next Card</button>
 <input type="text" id="shareLink" readonly placeholder="Shareable link will appear here..." />
+
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+<button id="musicBtn">Play/Pause Music</button>
 </div>
 
 <script>
-let cardCount = 0;
 const previewContainer = document.getElementById('previewContainer');
 const generateBtn = document.getElementById('generateBtn');
 const cardText = document.getElementById('cardText');
 const themeSelect = document.getElementById('themeSelect');
-const nextBtn = document.getElementById('nextBtn');
 const shareLink = document.getElementById('shareLink');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const bgMusic = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+const emojiBtns = document.querySelectorAll('.emojiBtn');
+
+let cards = [];
+let currentIndex = -1;
+
+// ===== Emoji Insertion =====
+emojiBtns.forEach(emoji=>{
+  emoji.addEventListener('click',()=>{ cardText.value += emoji.textContent; });
+});
 
 // ===== Particle Generator =====
 function spawnParticles(theme){
@@ -207,49 +250,60 @@ function spawnParticles(theme){
 }
 
 // ===== Generate Card =====
-function generateCard(text,theme){
-  const card = document.createElement('div');
-  card.classList.add('card',theme);
-  card.innerHTML = `<h2>Card #${cardCount+1}</h2><p>${text}</p>`;
-  previewContainer.appendChild(card);
-  
-  setTimeout(()=>{
-    card.style.opacity = 1;
-    card.style.transform = 'scale(1)';
-  },50);
+generateBtn.addEventListener('click',()=>{
+  const text = cardText.value;
+  const theme = themeSelect.value;
+  if(!text) return alert("Enter card text!");
+  const card = {text,theme};
+  cards.push(card);
+  currentIndex = cards.length-1;
+  displayCard(card);
+  generateShareLink(card);
+});
 
-  spawnParticles(theme);
-
-  // Generate shareable link (using hash)
-  const cardData = encodeURIComponent(JSON.stringify({text,theme}));
-  shareLink.value = window.location.origin + window.location.pathname + '#' + cardData;
-  cardCount++;
+function displayCard(card){
+  previewContainer.innerHTML = '';
+  const div = document.createElement('div');
+  div.classList.add('card',card.theme);
+  div.innerHTML = `<h2>Card #${currentIndex+1}</h2><p>${card.text}</p>`;
+  previewContainer.appendChild(div);
+  spawnParticles(card.theme);
 }
 
-// ===== Load card from link =====
-function loadCardFromHash(){
+function generateShareLink(card){
+  const data = encodeURIComponent(JSON.stringify(card));
+  shareLink.value = window.location.origin + window.location.pathname + '#' + data;
+}
+
+// ===== Navigation =====
+nextBtn.addEventListener('click',()=>{
+  if(currentIndex < cards.length-1) currentIndex++;
+  displayCard(cards[currentIndex]);
+  generateShareLink(cards[currentIndex]);
+});
+prevBtn.addEventListener('click',()=>{
+  if(currentIndex > 0) currentIndex--;
+  displayCard(cards[currentIndex]);
+  generateShareLink(cards[currentIndex]);
+});
+
+// ===== Load from link =====
+window.onload = ()=>{
   if(window.location.hash){
     try{
-      const data = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
-      generateCard(data.text,data.theme);
+      const card = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
+      cards.push(card);
+      currentIndex = cards.length-1;
+      displayCard(card);
     }catch(e){ console.log('Invalid card link'); }
   }
-}
+};
 
-// ===== Event Listeners =====
-generateBtn.addEventListener('click',()=>{
-  generateCard(cardText.value,themeSelect.value);
+// ===== Music Control =====
+musicBtn.addEventListener('click',()=>{
+  if(bgMusic.paused) bgMusic.play();
+  else bgMusic.pause();
 });
-
-nextBtn.addEventListener('click',()=>{
-  previewContainer.innerHTML = '';
-  cardText.value = '';
-  shareLink.value = '';
-});
-
-// Load card if link is shared
-window.onload = loadCardFromHash;
 </script>
-
 </body>
 </html>
