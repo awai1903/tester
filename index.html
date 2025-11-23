@@ -3,172 +3,256 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dynamic Card Generator</title>
+<title>Ultimate Card Generator</title>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #111;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-  }
+/* ===== Body & Container ===== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #111;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+}
 
-  /* Card generator container */
-  #generator {
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+#generator {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    text-align: center;
-    color: #ffcc00;
-    text-shadow: 1px 1px 5px #000;
-  }
+/* ===== Header ===== */
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #ffcc00;
+  text-shadow: 2px 2px 5px #000;
+  animation: glow 2s infinite alternate;
+}
 
-  textarea, select, input {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-  }
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00; }
+  100% { text-shadow: 0 0 20px #ffcc00, 0 0 40px #ffcc00; }
+}
 
-  button {
-    padding: 12px 20px;
-    background: linear-gradient(90deg,#ff7f50,#ffcc00);
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #111;
-  }
+/* ===== Input Controls ===== */
+textarea, select, input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
 
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #ffcc00;
-  }
+textarea {
+  resize: none;
+}
 
-  /* Card preview container */
-  #previewContainer {
-    margin-top: 25px;
-    width: 100%;
-    height: 400px;
-    perspective: 1500px;
-  }
+button {
+  padding: 14px 24px;
+  margin: 5px;
+  background: linear-gradient(90deg,#ff7f50,#ffcc00);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #111;
+}
 
-  #cardPreview {
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    background: #222;
-    overflow: hidden;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: all 0.8s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-shadow: 0 0 30px #000;
-  }
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ffcc00;
+}
 
-  #cardPreview h2 {
-    font-size: 28px;
-    text-align: center;
-    margin: 0;
-    animation: fadeInUp 1s ease;
-  }
+/* ===== Preview Container ===== */
+#previewContainer {
+  margin-top: 25px;
+  width: 100%;
+  height: 450px;
+  perspective: 2000px;
+  position: relative;
+}
 
-  #cardPreview p {
-    font-size: 18px;
-    text-align: center;
-    margin-top: 15px;
-    animation: fadeInUp 1.5s ease;
-  }
+/* ===== Card Styles ===== */
+#cardPreview {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s ease, box-shadow 1s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  box-shadow: 0 0 40px #000;
+  background: linear-gradient(135deg,#222,#444);
+  animation: fadeInCard 1s ease;
+}
 
-  /* Theme classes */
-  .theme-love { background: linear-gradient(135deg,#ff416c,#ff4b2b); color: #fff; }
-  .theme-birthday { background: linear-gradient(135deg,#fbc2eb,#a6c1ee); color: #111; }
-  .theme-halloween { background: linear-gradient(135deg,#ff8008,#ffc837); color: #111; }
-  .theme-royal { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color: #fff; }
+@keyframes fadeInCard {
+  0% { opacity:0; transform: scale(0.8);}
+  100% { opacity:1; transform: scale(1);}
+}
 
-  /* Animations */
-  @keyframes fadeInUp {
-    0% { opacity:0; transform: translateY(20px);}
-    100% { opacity:1; transform: translateY(0);}
-  }
+#cardPreview h2 {
+  font-size: 32px;
+  text-align: center;
+  margin: 0;
+  animation: fadeInUp 1s ease;
+}
 
-  /* Next button / share link */
-  #nextBtn {
-    margin-top: 20px;
-    background: linear-gradient(90deg,#00c6ff,#0072ff);
-    color: #fff;
-  }
+#cardPreview p {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 15px;
+  animation: fadeInUp 1.5s ease;
+}
+
+@keyframes fadeInUp {
+  0% { opacity:0; transform: translateY(20px);}
+  100% { opacity:1; transform: translateY(0);}
+}
+
+/* ===== Card Themes ===== */
+.theme-love { background: linear-gradient(135deg,#ff416c,#ff4b2b); color:#fff; }
+.theme-birthday { background: linear-gradient(135deg,#fbc2eb,#a6c1ee); color:#111; }
+.theme-halloween { background: linear-gradient(135deg,#ff8008,#ffc837); color:#111; }
+.theme-royal { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; }
+.theme-summer { background: linear-gradient(135deg,#fddb92,#d1fdff); color:#111; }
+.theme-sparkle { background: radial-gradient(circle, #fffc00,#ff00ff,#00ffff); color:#111; }
+
+/* ===== Animated Particles ===== */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100%); opacity:0.6; }
+  50% { opacity:1; }
+  100% { transform: translateY(-100%); opacity:0; }
+}
+
+/* ===== Next / Share Button ===== */
+#nextBtn {
+  margin-top: 20px;
+  background: linear-gradient(90deg,#00c6ff,#0072ff);
+  color:#fff;
+}
+
+/* ===== Responsiveness ===== */
+@media (max-width: 600px){
+  #cardPreview h2 { font-size: 24px; }
+  #cardPreview p { font-size: 16px; }
+  textarea, select, input { font-size: 14px; }
+  button { font-size: 14px; padding: 12px 20px; }
+}
 
 </style>
 </head>
 <body>
 
 <div id="generator">
-  <h1>Dynamic Card Generator</h1>
-  <textarea id="cardText" placeholder="Enter your card text here..." rows="4"></textarea>
-  <select id="themeSelect">
-    <option value="theme-love">Love Theme</option>
-    <option value="theme-birthday">Birthday Theme</option>
-    <option value="theme-halloween">Halloween Theme</option>
-    <option value="theme-royal">Royal Theme</option>
-  </select>
-  <button id="generateBtn">Generate Card</button>
+<h1>Ultimate Dynamic Card Generator</h1>
 
-  <div id="previewContainer">
-    <div id="cardPreview">
-      <h2>Card Title</h2>
-      <p>Card text will appear here...</p>
-    </div>
+<textarea id="cardText" placeholder="Enter your card message here..." rows="4"></textarea>
+<select id="themeSelect">
+  <option value="theme-love">Love Theme</option>
+  <option value="theme-birthday">Birthday Theme</option>
+  <option value="theme-halloween">Halloween Theme</option>
+  <option value="theme-royal">Royal Theme</option>
+  <option value="theme-summer">Summer Theme</option>
+  <option value="theme-sparkle">Sparkle Theme</option>
+</select>
+<button id="generateBtn">Generate Card</button>
+
+<div id="previewContainer">
+  <div id="cardPreview">
+    <h2>Card Preview</h2>
+    <p>Enter your text above to generate your card!</p>
   </div>
+</div>
 
-  <button id="nextBtn">Next Card / Share</button>
+<button id="nextBtn">Next Card / Share</button>
 </div>
 
 <script>
+// ===== Main Variables =====
 const generateBtn = document.getElementById('generateBtn');
 const cardPreview = document.getElementById('cardPreview');
 const cardText = document.getElementById('cardText');
 const themeSelect = document.getElementById('themeSelect');
 const nextBtn = document.getElementById('nextBtn');
+const previewContainer = document.getElementById('previewContainer');
 
 let cardCount = 0;
 
-// Generate card
-generateBtn.addEventListener('click', () => {
+// ===== Particle Generator =====
+function spawnParticles(theme){
+  for(let i=0;i<50;i++){
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = Math.random()*100 + '%';
+    p.style.background = theme.includes('love')?'#ff416c':theme.includes('birthday')?'#fbc2eb':'#fff';
+    p.style.width = Math.random()*6+4+'px';
+    p.style.height = p.style.width;
+    p.style.animationDuration = 3+Math.random()*2+'s';
+    previewContainer.appendChild(p);
+    setTimeout(()=>{previewContainer.removeChild(p)},4000);
+  }
+}
+
+// ===== Generate Card =====
+generateBtn.addEventListener('click', ()=>{
   const theme = themeSelect.value;
   cardPreview.className = '';
   cardPreview.classList.add(theme);
   cardPreview.innerHTML = `
-    <h2>Card #${cardCount + 1}</h2>
+    <h2>Card #${cardCount+1}</h2>
     <p>${cardText.value}</p>
   `;
   cardCount++;
+  spawnParticles(theme);
 });
 
-// Next card / simulate share
-nextBtn.addEventListener('click', () => {
+// ===== Next Card / Share =====
+nextBtn.addEventListener('click', ()=>{
   cardText.value = '';
   cardPreview.className = '';
-  cardPreview.innerHTML = `<h2>Card Preview</h2><p>Enter your text above to generate...</p>`;
+  cardPreview.innerHTML = `<h2>Card Preview</h2><p>Enter your text above to generate your card!</p>`;
 });
+
+// ===== Optional: Random Theme Generator =====
+setInterval(()=>{
+  if(cardCount>0 && Math.random()<0.01){
+    const themes = ['theme-love','theme-birthday','theme-halloween','theme-royal','theme-summer','theme-sparkle'];
+    const randomTheme = themes[Math.floor(Math.random()*themes.length)];
+    cardPreview.className = '';
+    cardPreview.classList.add(randomTheme);
+    spawnParticles(randomTheme);
+  }
+},2000);
+
 </script>
 
 </body>
