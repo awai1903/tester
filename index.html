@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultimate Card Generator</title>
+<title>Shareable Dynamic Card Generator</title>
 <style>
 /* ===== Body & Container ===== */
 body {
@@ -44,7 +44,7 @@ h1 {
 }
 
 /* ===== Input Controls ===== */
-textarea, select, input {
+textarea, select {
   width: 100%;
   margin-bottom: 15px;
   padding: 14px;
@@ -53,9 +53,7 @@ textarea, select, input {
   font-size: 16px;
 }
 
-textarea {
-  resize: none;
-}
+textarea { resize: none; }
 
 button {
   padding: 14px 24px;
@@ -85,36 +83,31 @@ button:hover {
 }
 
 /* ===== Card Styles ===== */
-#cardPreview {
+.card {
   width: 100%;
   height: 100%;
   border-radius: 20px;
   overflow: hidden;
-  position: relative;
+  position: absolute;
   transform-style: preserve-3d;
-  transition: transform 1s ease, box-shadow 1s ease;
+  transition: transform 1s ease, opacity 1s ease;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 25px;
   box-shadow: 0 0 40px #000;
   background: linear-gradient(135deg,#222,#444);
-  animation: fadeInCard 1s ease;
+  opacity: 0;
 }
 
-@keyframes fadeInCard {
-  0% { opacity:0; transform: scale(0.8);}
-  100% { opacity:1; transform: scale(1);}
-}
-
-#cardPreview h2 {
+.card h2 {
   font-size: 32px;
   text-align: center;
   margin: 0;
   animation: fadeInUp 1s ease;
 }
 
-#cardPreview p {
+.card p {
   font-size: 20px;
   text-align: center;
   margin-top: 15px;
@@ -153,17 +146,14 @@ button:hover {
 }
 
 /* ===== Next / Share Button ===== */
-#nextBtn {
-  margin-top: 20px;
-  background: linear-gradient(90deg,#00c6ff,#0072ff);
-  color:#fff;
-}
+#nextBtn { background: linear-gradient(90deg,#00c6ff,#0072ff); color:#fff; }
+#shareLink { margin-top:10px; word-break: break-all; }
 
 /* ===== Responsiveness ===== */
 @media (max-width: 600px){
-  #cardPreview h2 { font-size: 24px; }
-  #cardPreview p { font-size: 16px; }
-  textarea, select, input { font-size: 14px; }
+  .card h2 { font-size: 24px; }
+  .card p { font-size: 16px; }
+  textarea, select { font-size: 14px; }
   button { font-size: 14px; padding: 12px 20px; }
 }
 
@@ -172,7 +162,7 @@ button:hover {
 <body>
 
 <div id="generator">
-<h1>Ultimate Dynamic Card Generator</h1>
+<h1>Shareable Dynamic Card Generator</h1>
 
 <textarea id="cardText" placeholder="Enter your card message here..." rows="4"></textarea>
 <select id="themeSelect">
@@ -185,26 +175,20 @@ button:hover {
 </select>
 <button id="generateBtn">Generate Card</button>
 
-<div id="previewContainer">
-  <div id="cardPreview">
-    <h2>Card Preview</h2>
-    <p>Enter your text above to generate your card!</p>
-  </div>
-</div>
+<div id="previewContainer"></div>
 
-<button id="nextBtn">Next Card / Share</button>
+<button id="nextBtn">Next Card</button>
+<input type="text" id="shareLink" readonly placeholder="Shareable link will appear here..." />
 </div>
 
 <script>
-// ===== Main Variables =====
+let cardCount = 0;
+const previewContainer = document.getElementById('previewContainer');
 const generateBtn = document.getElementById('generateBtn');
-const cardPreview = document.getElementById('cardPreview');
 const cardText = document.getElementById('cardText');
 const themeSelect = document.getElementById('themeSelect');
 const nextBtn = document.getElementById('nextBtn');
-const previewContainer = document.getElementById('previewContainer');
-
-let cardCount = 0;
+const shareLink = document.getElementById('shareLink');
 
 // ===== Particle Generator =====
 function spawnParticles(theme){
@@ -223,36 +207,48 @@ function spawnParticles(theme){
 }
 
 // ===== Generate Card =====
-generateBtn.addEventListener('click', ()=>{
-  const theme = themeSelect.value;
-  cardPreview.className = '';
-  cardPreview.classList.add(theme);
-  cardPreview.innerHTML = `
-    <h2>Card #${cardCount+1}</h2>
-    <p>${cardText.value}</p>
-  `;
-  cardCount++;
+function generateCard(text,theme){
+  const card = document.createElement('div');
+  card.classList.add('card',theme);
+  card.innerHTML = `<h2>Card #${cardCount+1}</h2><p>${text}</p>`;
+  previewContainer.appendChild(card);
+  
+  setTimeout(()=>{
+    card.style.opacity = 1;
+    card.style.transform = 'scale(1)';
+  },50);
+
   spawnParticles(theme);
-});
 
-// ===== Next Card / Share =====
-nextBtn.addEventListener('click', ()=>{
-  cardText.value = '';
-  cardPreview.className = '';
-  cardPreview.innerHTML = `<h2>Card Preview</h2><p>Enter your text above to generate your card!</p>`;
-});
+  // Generate shareable link (using hash)
+  const cardData = encodeURIComponent(JSON.stringify({text,theme}));
+  shareLink.value = window.location.origin + window.location.pathname + '#' + cardData;
+  cardCount++;
+}
 
-// ===== Optional: Random Theme Generator =====
-setInterval(()=>{
-  if(cardCount>0 && Math.random()<0.01){
-    const themes = ['theme-love','theme-birthday','theme-halloween','theme-royal','theme-summer','theme-sparkle'];
-    const randomTheme = themes[Math.floor(Math.random()*themes.length)];
-    cardPreview.className = '';
-    cardPreview.classList.add(randomTheme);
-    spawnParticles(randomTheme);
+// ===== Load card from link =====
+function loadCardFromHash(){
+  if(window.location.hash){
+    try{
+      const data = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
+      generateCard(data.text,data.theme);
+    }catch(e){ console.log('Invalid card link'); }
   }
-},2000);
+}
 
+// ===== Event Listeners =====
+generateBtn.addEventListener('click',()=>{
+  generateCard(cardText.value,themeSelect.value);
+});
+
+nextBtn.addEventListener('click',()=>{
+  previewContainer.innerHTML = '';
+  cardText.value = '';
+  shareLink.value = '';
+});
+
+// Load card if link is shared
+window.onload = loadCardFromHash;
 </script>
 
 </body>
