@@ -1,32 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Trading Bot Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Sniper Reflex Trainer</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #gameArea {
+    position: relative;
+    width: 100%;
+    max-width: 400px; /* optimized for Redmi 14C screen */
+    height: 90vh;
+    background: #222;
+    border: 2px solid #555;
+    border-radius: 10px;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+
+  .target {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: red;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: pulse 0.8s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  #stats {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  #startBtn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 15px;
+    font-size: 16px;
+    background: green;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>AI Trading Bot Dashboard</h1>
-        <div class="controls">
-            <label for="pairSelector">Select Pair:</label>
-            <select id="pairSelector">
-                <option value="btcusdt">BTC/USDT</option>
-                <option value="ethusdt">ETH/USDT</option>
-            </select>
-            <button id="analyseBtn">Analyse Chart (Manual)</button>
-        </div>
-        <div id="chart" class="chart-container"></div>
-        <div id="indicatorPanel" class="indicator-panel">
-            <h3>Indicators</h3>
-            <p>RSI: <span id="rsiValue">-</span></p>
-            <p>MACD: <span id="macdValue">-</span></p>
-            <p>Trend: <span id="trendValue">-</span></p>
-        </div>
-        <div id="signalPanel" class="signal-panel">No signal yet</div>
-    </div>
-    <script src="script.js"></script>
+
+<div id="gameArea">
+  <div id="stats">Hits: 0 | Misses: 0 | Accuracy: 0%</div>
+  <button id="startBtn">Start Sniper Practice</button>
+</div>
+
+<script>
+let hits = 0;
+let misses = 0;
+let totalClicks = 0;
+let gameInterval;
+
+const gameArea = document.getElementById('gameArea');
+const stats = document.getElementById('stats');
+const startBtn = document.getElementById('startBtn');
+
+function updateStats() {
+  const accuracy = totalClicks === 0 ? 0 : ((hits / totalClicks) * 100).toFixed(1);
+  stats.innerText = `Hits: ${hits} | Misses: ${misses} | Accuracy: ${accuracy}%`;
+}
+
+function createTarget() {
+  const target = document.createElement('div');
+  target.className = 'target';
+  
+  const maxX = gameArea.clientWidth - 50;
+  const maxY = gameArea.clientHeight - 50;
+  
+  target.style.left = Math.random() * maxX + 'px';
+  target.style.top = Math.random() * maxY + 'px';
+
+  // Randomly move target a little after spawn to simulate moving enemy
+  let moveInterval = setInterval(() => {
+    target.style.left = Math.random() * maxX + 'px';
+    target.style.top = Math.random() * maxY + 'px';
+  }, 500);
+
+  target.addEventListener('click', () => {
+    hits++;
+    totalClicks++;
+    updateStats();
+    clearInterval(moveInterval);
+    if (gameArea.contains(target)) gameArea.removeChild(target);
+  });
+
+  gameArea.appendChild(target);
+
+  setTimeout(() => {
+    if (gameArea.contains(target)) {
+      misses++;
+      totalClicks++;
+      updateStats();
+      clearInterval(moveInterval);
+      gameArea.removeChild(target);
+    }
+  }, 1500); // Target disappears after 1.5s
+}
+
+startBtn.addEventListener('click', () => {
+  hits = 0;
+  misses = 0;
+  totalClicks = 0;
+  updateStats();
+  if (gameInterval) clearInterval(gameInterval);
+  gameInterval = setInterval(createTarget, 800); // spawn new target every 0.8s
+});
+</script>
+
 </body>
 </html>
