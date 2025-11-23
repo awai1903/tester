@@ -3,96 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FF Style Sniper Trainer</title>
+<title>Dynamic Card Generator</title>
 <style>
   body {
     margin: 0;
-    padding: 0;
-    background: #0d0d0d;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
   }
 
-  #gameArea {
+  /* Card generator container */
+  #generator {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #ffcc00;
+    text-shadow: 1px 1px 5px #000;
+  }
+
+  textarea, select, input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 12px 20px;
+    background: linear-gradient(90deg,#ff7f50,#ffcc00);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #111;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ffcc00;
+  }
+
+  /* Card preview container */
+  #previewContainer {
+    margin-top: 25px;
+    width: 100%;
+    height: 400px;
+    perspective: 1500px;
+  }
+
+  #cardPreview {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background: #222;
+    overflow: hidden;
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(#111, #222);
-    overflow: hidden;
-  }
-
-  /* FF style HUD buttons */
-  .button {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
+    transform-style: preserve-3d;
+    transition: all 0.8s ease;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-    color: #fff;
-    user-select: none;
+    padding: 20px;
+    box-shadow: 0 0 30px #000;
   }
 
-  #fireBtn { bottom: 20px; right: 20px; }
-  #scopeBtn { bottom: 90px; right: 20px; }
-  #jumpBtn { bottom: 160px; right: 20px; }
-  #crouchBtn { bottom: 230px; right: 20px; }
-  #switchBtn { bottom: 300px; right: 20px; }
-
-  /* Mini joystick */
-  #joystick {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 100px;
-    height: 100px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    touch-action: none;
-  }
-  
-  /* Targets */
-  .target {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: red;
-    border-radius: 50%;
-    border: 2px solid yellow;
-    cursor: pointer;
-    animation: pulse 0.8s infinite;
+  #cardPreview h2 {
+    font-size: 28px;
+    text-align: center;
+    margin: 0;
+    animation: fadeInUp 1s ease;
   }
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
-
-  /* Crosshair */
-  #crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 40px;
-    margin-left: -20px;
-    margin-top: -20px;
-    border: 2px solid white;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  /* Stats display */
-  #stats {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+  #cardPreview p {
     font-size: 18px;
+    text-align: center;
+    margin-top: 15px;
+    animation: fadeInUp 1.5s ease;
+  }
+
+  /* Theme classes */
+  .theme-love { background: linear-gradient(135deg,#ff416c,#ff4b2b); color: #fff; }
+  .theme-birthday { background: linear-gradient(135deg,#fbc2eb,#a6c1ee); color: #111; }
+  .theme-halloween { background: linear-gradient(135deg,#ff8008,#ffc837); color: #111; }
+  .theme-royal { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color: #fff; }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    0% { opacity:0; transform: translateY(20px);}
+    100% { opacity:1; transform: translateY(0);}
+  }
+
+  /* Next button / share link */
+  #nextBtn {
+    margin-top: 20px;
+    background: linear-gradient(90deg,#00c6ff,#0072ff);
     color: #fff;
   }
 
@@ -100,78 +121,55 @@
 </head>
 <body>
 
-<div id="gameArea">
-  <div id="crosshair"></div>
-  <div id="stats">Hits: 0 | Misses: 0 | Accuracy: 0%</div>
-  
-  <!-- FF style HUD -->
-  <div class="button" id="fireBtn">F</div>
-  <div class="button" id="scopeBtn">S</div>
-  <div class="button" id="jumpBtn">J</div>
-  <div class="button" id="crouchBtn">C</div>
-  <div class="button" id="switchBtn">W</div>
+<div id="generator">
+  <h1>Dynamic Card Generator</h1>
+  <textarea id="cardText" placeholder="Enter your card text here..." rows="4"></textarea>
+  <select id="themeSelect">
+    <option value="theme-love">Love Theme</option>
+    <option value="theme-birthday">Birthday Theme</option>
+    <option value="theme-halloween">Halloween Theme</option>
+    <option value="theme-royal">Royal Theme</option>
+  </select>
+  <button id="generateBtn">Generate Card</button>
 
-  <div id="joystick"></div>
+  <div id="previewContainer">
+    <div id="cardPreview">
+      <h2>Card Title</h2>
+      <p>Card text will appear here...</p>
+    </div>
+  </div>
+
+  <button id="nextBtn">Next Card / Share</button>
 </div>
 
 <script>
-let hits = 0, misses = 0, totalClicks = 0;
-const gameArea = document.getElementById('gameArea');
-const stats = document.getElementById('stats');
+const generateBtn = document.getElementById('generateBtn');
+const cardPreview = document.getElementById('cardPreview');
+const cardText = document.getElementById('cardText');
+const themeSelect = document.getElementById('themeSelect');
+const nextBtn = document.getElementById('nextBtn');
 
-function updateStats() {
-  const accuracy = totalClicks === 0 ? 0 : ((hits/totalClicks)*100).toFixed(1);
-  stats.innerText = `Hits: ${hits} | Misses: ${misses} | Accuracy: ${accuracy}%`;
-}
+let cardCount = 0;
 
-// Target creation
-function spawnTarget() {
-  const target = document.createElement('div');
-  target.className = 'target';
+// Generate card
+generateBtn.addEventListener('click', () => {
+  const theme = themeSelect.value;
+  cardPreview.className = '';
+  cardPreview.classList.add(theme);
+  cardPreview.innerHTML = `
+    <h2>Card #${cardCount + 1}</h2>
+    <p>${cardText.value}</p>
+  `;
+  cardCount++;
+});
 
-  const maxX = gameArea.clientWidth - 50;
-  const maxY = gameArea.clientHeight - 50;
-
-  target.style.left = Math.random() * maxX + 'px';
-  target.style.top = Math.random() * maxY + 'px';
-
-  // moving target to simulate in-game movement
-  const moveInterval = setInterval(() => {
-    target.style.left = Math.random() * maxX + 'px';
-    target.style.top = Math.random() * maxY + 'px';
-  }, 600); // moves every 0.6s
-
-  target.addEventListener('click', () => {
-    hits++;
-    totalClicks++;
-    updateStats();
-    clearInterval(moveInterval);
-    if(gameArea.contains(target)) gameArea.removeChild(target);
-  });
-
-  gameArea.appendChild(target);
-
-  setTimeout(() => {
-    if(gameArea.contains(target)) {
-      misses++;
-      totalClicks++;
-      updateStats();
-      clearInterval(moveInterval);
-      gameArea.removeChild(target);
-    }
-  }, 1500); // target disappears
-}
-
-// Spawn targets continuously
-setInterval(spawnTarget, 800);
-
-// HUD buttons click simulation
-document.getElementById('fireBtn').addEventListener('click', () => alert('Fire!'));
-document.getElementById('scopeBtn').addEventListener('click', () => alert('Scoped!'));
-document.getElementById('jumpBtn').addEventListener('click', () => alert('Jump!'));
-document.getElementById('crouchBtn').addEventListener('click', () => alert('Crouch!'));
-document.getElementById('switchBtn').addEventListener('click', () => alert('Switch Weapon!'));
-
+// Next card / simulate share
+nextBtn.addEventListener('click', () => {
+  cardText.value = '';
+  cardPreview.className = '';
+  cardPreview.innerHTML = `<h2>Card Preview</h2><p>Enter your text above to generate...</p>`;
+});
 </script>
+
 </body>
 </html>
